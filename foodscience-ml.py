@@ -56,4 +56,5 @@ else:
     Fio.summary_outlier_to_excel(pd.DataFrame(summary_outliers), file_name)
 
     print('Done at ' + str(datetime.now()))
+    print('Hello Github!')
     plt.show()
