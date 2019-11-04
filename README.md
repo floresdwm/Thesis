@@ -8,5 +8,5 @@ This program could be used to fast evaluate dataset for this purpose.
 
 
 Douglas William Menezes Flores
-douglas@usp.br
+douglasflores@usp.br
 +5516981036015
