@@ -12,13 +12,13 @@ douglasflores@usp.br
 +5516981036015
 
 
-Python 3.6
-Xlrd 1.2.0
-Openpyxl 3.0.0
-Scikit-learn 0.21.2
-Seaborn 0.9.0
-matplotlib 3.1.0
-Pandas 0.24.2
-numpy 1.16.4
-scipy 1.3.0
-pip 19.1.1
+Python 3.6;
+Xlrd 1.2.0;
+Openpyxl 3.0.0;
+Scikit-learn 0.21.2;
+Seaborn 0.9.0;
+matplotlib 3.1.0;
+Pandas 0.24.2;
+numpy 1.16.4;
+scipy 1.3.0;
+pip 19.1.1;
