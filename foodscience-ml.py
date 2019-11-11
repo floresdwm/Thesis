@@ -11,7 +11,9 @@ import Classes.Configurations as cfg
 
 # 1. import data
 print('Starting at ' + str(datetime.now()))
-confidence = cfg.confidence_level
+outlier_confidence_level_x = cfg.outlier_confidence_level_x
+outlier_confidence_level_y = cfg.outlier_confidence_level_y
+confidence_pca = cfg.confidence_pca
 labels, x, y, file_name = Fio.import_excel_data()
 n_total = x.shape[0]
 
@@ -31,14 +33,14 @@ else:
     # 3. plot imported data
     if y.shape[1] >= 1:
         Plot.correlation_matrix(y, file_name)
-    Plot.x_data(x, file_name)
 
     # 4. exclude outliers based on Mahalanobis distance
-    x_data, y_data, df_cleaned_x, df_cleaned_xy, df_outliers_x, df_outliers_xy, n_outliers_x, n_outliers_y = Exp.exclude_outliers(
-        x, y, labels, confidence)
+    x_data, y_data, df_cleaned_x, df_cleaned_xy, df_outliers_x, df_outliers_xy, n_outliers_x, n_outliers_y, x_out, y_out = Exp.exclude_outliers(
+        x, y, labels, outlier_confidence_level_x, outlier_confidence_level_y)
     if n_outliers_y != 0 and n_outliers_x != 0:
         help.outliers_pcs_plot(df_cleaned_x, df_cleaned_xy, df_outliers_x, df_outliers_xy, labels, n_outliers_x,
                                n_outliers_y, file_name)
+        Plot.x_data_outliers(x_data, x_out, file_name)
 
     summary_outliers = ['N Total: ' + str(n_total),
                         'N Outliers X: ' + str(n_outliers_x) + ' - %: ' + str(((n_outliers_x * 100) / n_total)),

@@ -29,6 +29,35 @@ def x_data(df, file_name):
     plt.savefig(path + 'x_plot_.png')
 
 
+def x_data_outliers(df_clean, df_out, file_name):
+    plt.figure(20, figsize=(8, 4), dpi=125)
+    plt.subplot(221)
+    plt.title('All X Data OUTLIERS')
+    plt.plot(pd.DataFrame(df_out).transpose())
+    df_std_positive = pd.DataFrame(df_out).transpose().mean(axis=1) + pd.DataFrame(df_out).transpose().std(axis=1)
+    df_std_negative = pd.DataFrame(df_out).transpose().mean(axis=1) - pd.DataFrame(df_out).transpose().std(axis=1)
+    plt.subplot(222)
+    plt.title('X Data OUTLIERS average +/- STD')
+    plt.plot(df_std_positive, color='indianred', linestyle='dashed')
+    plt.plot(pd.DataFrame(df_out).transpose().mean(axis=1), color='black')
+    plt.plot(df_std_negative, color='indianred', linestyle='dashed')
+    plt.subplot(223)
+    plt.title('All X Data selected')
+    plt.plot(pd.DataFrame(df_clean).transpose())
+    df_std_positive3 = pd.DataFrame(df_clean).transpose().mean(axis=1) + pd.DataFrame(df_clean).transpose().std(axis=1)
+    df_std_negative3 = pd.DataFrame(df_clean).transpose().mean(axis=1) - pd.DataFrame(df_clean).transpose().std(axis=1)
+    plt.subplot(224)
+    plt.title('X Data selected average +/- STD')
+    plt.plot(df_std_positive3, color='indianred', linestyle='dashed')
+    plt.plot(pd.DataFrame(df_clean).transpose().mean(axis=1), color='black')
+    plt.plot(df_std_negative3, color='indianred', linestyle='dashed')
+    path = os.path.expanduser("~/Desktop") + '/foodscienceml' + '/' + file_name.replace('.xlsx', '').replace('.xls',
+                                                                                                             '') + '/Figures' + '/'
+    if not os.path.exists(path):
+        os.makedirs(path)
+    plt.savefig(path + 'x_plot_outliers.png')
+
+
 def correlation_matrix(df, file_name):
         correlations = df.corr()
         figname = sns.clustermap(data=correlations, annot=True, cmap='Greens')
@@ -124,7 +153,7 @@ def pca_xy_and_outliersb(df_cleaned_x, df_cleaned_xy, df_outliers_x, df_outliers
     f4.axvline(x=0, color='k', linewidth=1)
 
 
-def confidence_ellipse(x, y, ax, n_std=cfg.confidence_level, facecolor='none', **kwargs):
+def confidence_ellipse(x, y, ax, n_std=cfg.confidence_pca, facecolor='none', **kwargs):
     """
     Create a plot of the covariance confidence ellipse of *x* and *y*.
 
