@@ -1,17 +1,16 @@
-# Food science and technology automated multivariate regression program
+# Data science: Python for autonomous outlier detection and partial leasts square regression 
 
 This project is part of my phD thesis. 
 The aim of this work is enable people of food science and technology area to work with Python for data science/chemometrics.
-Python could be used to analyze near infrared spectroscopy or time domain nuclear magnetic ressonance data and build machine learning
-models to predict quality parameters using only the aquired instrumentation signal.
-This program could be used to fast evaluate dataset for this purpose. 
+Python could be used to analyze near infrared spectroscopy (NIR) or time domain nuclear magnetic ressonance (TD-NMR) data and build machine learning models to predict quality parameters using only the aquired instrumentation signal.
+This program could be used to fast evaluate outliers in datasets and train/test PLSR models. 
 
 
 Douglas William Menezes Flores
 douglasflores@usp.br
 +5516981036015
 
-
+PyCharm2019
 Python 3.6;
 Xlrd 1.2.0;
 Openpyxl 3.0.0;
