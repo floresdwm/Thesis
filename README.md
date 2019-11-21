@@ -7,8 +7,8 @@ This program could be used to fast evaluate outliers in datasets and train/test 
 
 
 Douglas William Menezes Flores
-douglasflores@usp.br
-+5516981036015
+douglasfloresm@gmail.com
+
 
 PyCharm2019
 Python 3.6;
