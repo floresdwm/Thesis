@@ -76,27 +76,48 @@ def extract_pc1_pc2(data_to_analyze, n_components):
 
 
 def exclude_outliers(x, y, labels, outlier_confidence_level_x, outlier_confidence_level_y):
-    main_df = pd.DataFrame(pd.concat([x, y], axis=1))
-    main_df.index = labels
-    x_shape = x.shape[1]
-    y_start = x_shape
+    if y.shape[1] == 1:
+        main_df = pd.DataFrame(pd.concat([x, y], axis=1))
+        main_df.index = labels
+        x_shape = x.shape[1]
+        y_start = x_shape
 
-    n_total = x.shape[0]
-    mahalanobis_x = pd.DataFrame(do_mahalanobis(main_df.iloc[:, 0:y_start]))
-    df_cleaned_x = pd.DataFrame(pd.concat([mahalanobis_x, main_df.iloc[:, y_start:]], axis=1))
-    df_outliers_x, df_cleaned_x, pcs_out_x, pcs_cleaned_x = drop_mahalanobis_outliers(df_cleaned_x, outlier_confidence_level_x)
-    n_outliers_x = df_outliers_x.shape[0]
+        n_total = x.shape[0]
+        mahalanobis_x = pd.DataFrame(do_mahalanobis(main_df.iloc[:, 0:y_start]))
+        df_cleaned_x = pd.DataFrame(pd.concat([mahalanobis_x, main_df.iloc[:, y_start:]], axis=1))
+        df_outliers_x, df_cleaned_x, pcs_out_x, pcs_cleaned_x = drop_mahalanobis_outliers(df_cleaned_x,
+                                                                                          outlier_confidence_level_x)
+        n_outliers_x = df_outliers_x.shape[0]
 
-    mahalanobis_y = pd.DataFrame(do_mahalanobis(df_cleaned_x.iloc[:, y_start:]))
-    df_cleaned_xy = pd.DataFrame(
-        pd.concat([df_cleaned_x.iloc[:, 0:y_start], mahalanobis_y], axis=1))
-    df_outliers_xy, df_cleaned_xy, pcs_out_y, pcs_cleaned_y = drop_mahalanobis_outliers(df_cleaned_xy, outlier_confidence_level_y)
-    n_outliers_y = df_outliers_xy.shape[0]
+        x_data = pd.DataFrame(df_cleaned_x.iloc[:, 0:y_start])
+        y_data = pd.DataFrame(df_cleaned_x.iloc[:, y_start:])
 
-    x_data = pd.DataFrame(df_cleaned_xy.iloc[:, 0:y_start])
-    y_data = pd.DataFrame(df_cleaned_xy.iloc[:, y_start:])
+        x_out = pd.DataFrame(df_outliers_x.iloc[:, 0:y_start])
+        y_out = pd.DataFrame(df_outliers_x.iloc[:, y_start:])
 
-    x_out = pd.DataFrame(df_outliers_x.iloc[:, 0:y_start])
-    y_out = pd.DataFrame(df_outliers_xy.iloc[:, y_start:])
+        return x_data, y_data, pcs_cleaned_x, pcs_cleaned_x, pcs_out_x, pcs_out_x, n_outliers_x, n_outliers_x, x_out, y_out
+    else:
+        main_df = pd.DataFrame(pd.concat([x, y], axis=1))
+        main_df.index = labels
+        x_shape = x.shape[1]
+        y_start = x_shape
 
-    return x_data, y_data, pcs_cleaned_x, pcs_cleaned_y, pcs_out_x, pcs_out_y, n_outliers_x, n_outliers_y, x_out, y_out
+        n_total = x.shape[0]
+        mahalanobis_x = pd.DataFrame(do_mahalanobis(main_df.iloc[:, 0:y_start]))
+        df_cleaned_x = pd.DataFrame(pd.concat([mahalanobis_x, main_df.iloc[:, y_start:]], axis=1))
+        df_outliers_x, df_cleaned_x, pcs_out_x, pcs_cleaned_x = drop_mahalanobis_outliers(df_cleaned_x, outlier_confidence_level_x)
+        n_outliers_x = df_outliers_x.shape[0]
+
+        mahalanobis_y = pd.DataFrame(do_mahalanobis(df_cleaned_x.iloc[:, y_start:]))
+        df_cleaned_xy = pd.DataFrame(
+            pd.concat([df_cleaned_x.iloc[:, 0:y_start], mahalanobis_y], axis=1))
+        df_outliers_xy, df_cleaned_xy, pcs_out_y, pcs_cleaned_y = drop_mahalanobis_outliers(df_cleaned_xy, outlier_confidence_level_y)
+        n_outliers_y = df_outliers_xy.shape[0]
+
+        x_data = pd.DataFrame(df_cleaned_xy.iloc[:, 0:y_start])
+        y_data = pd.DataFrame(df_cleaned_xy.iloc[:, y_start:])
+
+        x_out = pd.DataFrame(df_outliers_x.iloc[:, 0:y_start])
+        y_out = pd.DataFrame(df_outliers_xy.iloc[:, y_start:])
+
+        return x_data, y_data, pcs_cleaned_x, pcs_cleaned_y, pcs_out_x, pcs_out_y, n_outliers_x, n_outliers_y, x_out, y_out

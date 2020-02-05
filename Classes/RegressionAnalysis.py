@@ -33,6 +33,7 @@ def partial_leasts_square_regression(x, y, train_split_percentage):
         pd.concat([pd.DataFrame(list(y_df.columns)), pd.DataFrame(rmsec), pd.DataFrame(r2cal), pd.DataFrame(rmsecv), pd.DataFrame(r2cv)], axis=1))
     s = pd.Series(['Parameter', 'RMSEC', 'R2CAL', 'RMSECV', 'R2CV'])
     df_models_summary = df_models_summary.transpose().set_index(s)
+    df_models_summary = pd.DataFrame(pd.concat([df_models_summary, pd.DataFrame(y_df.describe())], axis=0))
 
     return df_models_summary, models, x_train, y_train, x_test, y_test
 
@@ -69,3 +70,24 @@ def do_pls(data_x, data_y, train_split_percentage):
 def run_pls(x, model):
     y_hat = model.predict(x)
     return y_hat
+
+
+def remove_rows_with_zeros(x, y):
+    df_x = pd.DataFrame(x)
+    df_y = pd.DataFrame(y)
+    params = df_y.shape[1]
+
+    df = pd.concat([df_x, df_y], axis=1)
+    bol = df != 0
+    df = df[bol]
+    df = df.dropna()
+
+    df_x = pd.DataFrame(df.iloc[:, 0:-params])
+    df_x = df_x.set_index(df.iloc[:, 0:-params].index)
+    df_y = pd.DataFrame(df.iloc[:, -params:])
+    df_y = df_y.set_index(df.iloc[:, -params:].index)
+
+    return df_x, df_y
+
+
+

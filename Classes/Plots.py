@@ -10,8 +10,8 @@ import Classes.RegressionAnalysis as pls
 import Classes.Configurations as cfg
 
 
-def x_data(df, file_name):
-    plt.figure(2, figsize=(8, 4), dpi=125)
+def x_data(df, file_name, fig):
+    plt.figure(fig, figsize=(8, 4), dpi=125)
     plt.subplot(121)
     plt.title('All X Data')
     plt.plot(pd.DataFrame(df).transpose())
@@ -59,6 +59,7 @@ def x_data_outliers(df_clean, df_out, file_name):
 
 
 def correlation_matrix(df, file_name):
+    if df.shape[1] > 1:
         correlations = df.corr()
         figname = sns.clustermap(data=correlations, annot=True, cmap='Greens')
         plt.title('Pearson (r)')
@@ -253,3 +254,34 @@ def scatter_x_y(x_train, y_train, x_test, y_test, summary_models, models, file_n
         if not os.path.exists(path):
             os.makedirs(path)
         plt.savefig(path + str(figname) + str(i) + '_.png')
+
+
+def scatter_x_y_n(x_train, y_train, x_test, y_test, summary_models, models, file_name, fig, paramname):
+    n_train = y_train.shape[0]
+    n_test = y_test.shape[0]
+    for i in range(y_train.shape[1]):
+        figname = 'fig' + str(10+fig)
+        figname = plt.figure(10+fig, figsize=(8, 4), dpi=125)
+        plt.xlabel('Y measured')
+        plt.ylabel('Y predicted')
+        yhats = pls.run_pls(x_train, models[i])
+        plt.scatter(y_train.iloc[:, i], yhats, label="Train data")
+        plt.plot(y_train.iloc[:, i], y_train.iloc[:, i], color='red', linewidth=0.5)
+        plt.legend(loc='best', shadow=False, scatterpoints=1)
+
+    for i in range(y_test.shape[1]):
+        figname = 'fig' + str(10+fig)
+        figname = plt.figure(10+fig, figsize=(8, 4), dpi=125)
+        plt.xlabel('Y measured')
+        plt.ylabel('Y predicted')
+        yhats = pls.run_pls(x_test, models[i])
+        plt.scatter(y_test.iloc[:, i], yhats, label="Test data")
+        plt.plot(y_test.iloc[:, i], y_test.iloc[:, i], color='red', linewidth=0.5)
+        plt.legend(loc='best', shadow=False, scatterpoints=1)
+        figname.text(0, 0, str(summary_models.iloc[0:5, 0].to_string()) +
+                     str(' N Train: ' + str(n_train) + str(' N Test: ' + str(n_test))), color='red', fontsize=7,
+                     bbox={'facecolor': 'white', 'alpha': 0.5, 'pad': 5})
+        path = os.path.expanduser("~/Desktop") + '/foodscienceml' + '/' + file_name.replace('.xlsx', '').replace('.xls', '') + '/Figures' + '/'
+        if not os.path.exists(path):
+            os.makedirs(path)
+        plt.savefig(path + str(figname) + str(i) + paramname + '_.png')
