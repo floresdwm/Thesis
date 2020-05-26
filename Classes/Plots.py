@@ -1,5 +1,4 @@
 import os
-
 import seaborn as sns; sns.set()
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -8,6 +7,7 @@ from matplotlib.patches import Ellipse
 import matplotlib.transforms as transforms
 import Classes.RegressionAnalysis as pls
 import Classes.Configurations as cfg
+from sklearn.model_selection import train_test_split
 
 
 def x_data(df, file_name, fig):
@@ -28,6 +28,24 @@ def x_data(df, file_name, fig):
         os.makedirs(path)
     plt.savefig(path + 'x_plot_.png')
 
+
+def x_data_epo(df, file_name, fig, plot_name):
+    plt.figure(fig, figsize=(8, 4), dpi=125)
+    plt.subplot(121)
+    plt.title(plot_name)
+    plt.plot(pd.DataFrame(df).transpose())
+    df_std_positive = pd.DataFrame(df).transpose().mean(axis=1) + pd.DataFrame(df).transpose().std(axis=1)
+    df_std_negative = pd.DataFrame(df).transpose().mean(axis=1) - pd.DataFrame(df).transpose().std(axis=1)
+    plt.subplot(122)
+    plt.title('X Data average +/- STD')
+    plt.plot(df_std_positive, color='indianred', linestyle='dashed')
+    plt.plot(pd.DataFrame(df).transpose().mean(axis=1), color='black')
+    plt.plot(df_std_negative, color='indianred', linestyle='dashed')
+    path = os.path.expanduser("~/Desktop") + '/foodscienceml' + '/' + file_name.replace('.xlsx', '').replace('.xls',
+                                                                                                             '') + '/Figures' + '/'
+    if not os.path.exists(path):
+        os.makedirs(path)
+    plt.savefig(path + 'x_plot_.png')
 
 def x_data_outliers(df_clean, df_out, file_name):
     plt.figure(20, figsize=(8, 4), dpi=125)
@@ -260,6 +278,38 @@ def scatter_x_y_n(x_train, y_train, x_test, y_test, summary_models, models, file
     n_train = y_train.shape[0]
     n_test = y_test.shape[0]
     for i in range(y_train.shape[1]):
+        figname = 'fig ' + str(paramname)
+        figname = plt.figure(figname, figsize=(8, 4), dpi=125)
+        plt.xlabel('Y measured')
+        plt.ylabel('Y predicted')
+        yhats = pls.run_pls(x_train, models[i])
+        plt.scatter(y_train.iloc[:, i], yhats, label="Train data")
+        plt.plot(y_train.iloc[:, i], y_train.iloc[:, i], color='red', linewidth=0.5)
+        plt.legend(loc='best', shadow=False, scatterpoints=1)
+
+    for i in range(y_test.shape[1]):
+        figname = 'fig ' + str(paramname)
+        figname = plt.figure(figname, figsize=(8, 4), dpi=125)
+        plt.xlabel('Y measured')
+        plt.ylabel('Y predicted')
+        yhats = pls.run_pls(x_test, models[i])
+        plt.scatter(y_test.iloc[:, i], yhats, label="Test data")
+        plt.plot(y_test.iloc[:, i], y_test.iloc[:, i], color='red', linewidth=0.5)
+        plt.legend(loc='best', shadow=False, scatterpoints=1)
+        figname.text(0, 0, str(summary_models.iloc[0:5, 0].to_string()) +
+                     str(' N Train: ' + str(n_train) + str(' N Test: ' + str(n_test))), color='red', fontsize=7,
+                     bbox={'facecolor': 'white', 'alpha': 0.5, 'pad': 5})
+        path = os.path.expanduser("~/Desktop") + '/foodscienceml' + '/' + file_name.replace('.xlsx', '').replace('.xls', '') + '/Figures' + '/'
+        if not os.path.exists(path):
+            os.makedirs(path)
+        plt.savefig(path + str(figname) + str(i) + '_.png')
+
+
+def med_x_pred_sigma(x_data, y_data, summary_models, models, file_name, fig, paramname):
+    x_test, x_train, y_test, y_train = train_test_split(x_data, y_data, test_size=cfg.train_split_percentage, random_state=0)
+    n_train = y_train.shape[0]
+    n_test = y_test.shape[0]
+    for i in range(y_train.shape[1]):
         figname = 'fig' + str(10+fig)
         figname = plt.figure(10+fig, figsize=(8, 4), dpi=125)
         plt.xlabel('Y measured')
@@ -281,7 +331,8 @@ def scatter_x_y_n(x_train, y_train, x_test, y_test, summary_models, models, file
         figname.text(0, 0, str(summary_models.iloc[0:5, 0].to_string()) +
                      str(' N Train: ' + str(n_train) + str(' N Test: ' + str(n_test))), color='red', fontsize=7,
                      bbox={'facecolor': 'white', 'alpha': 0.5, 'pad': 5})
-        path = os.path.expanduser("~/Desktop") + '/foodscienceml' + '/' + file_name.replace('.xlsx', '').replace('.xls', '') + '/Figures' + '/'
+        path = os.path.expanduser("~/Desktop") + '/foodscienceml' + '/' + file_name.replace('.xlsx', '').replace('.xls', '') + '/'
         if not os.path.exists(path):
             os.makedirs(path)
         plt.savefig(path + str(figname) + str(i) + paramname + '_.png')
+

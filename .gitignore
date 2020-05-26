@@ -1,2 +1,10 @@
 # Project exclude paths
 /venv_notebook/
+/EPO.py
+/scirroutine.py
+/Classes/donut_plot_with_subgroups_from_dataframe.py
+/debug.py
+/donut.py
+/donut_plot.png
+/Thesis_280420.rar
+/venv/
