@@ -7,8 +7,8 @@ outlier_confidence_level_y = 3
 
 # Sigma outliers
 sigma_detection = False
-sigma_percentage = True
-sigma_confidence = 50
+sigma_percentage = False
+sigma_confidence = 8
 
 # Polarization test, not working yet
 polarization_test = False
@@ -18,7 +18,7 @@ polarization_n_groups = 2
 train_split_percentage = 0.7
 
 # MISC Inform pre-processing transformation method
-transformation = 'Primeira derivada (5pts)'  # modelos> "SNV", "Primeira derivada (5pts)", "SNV + Primeira derivada (5pts)", "SNV + Primeira derivada (7pts)"
+transformation = 'SNV'  # modelos> "SNV", "Primeira derivada (5pts)", "SNV + Primeira derivada (5pts)", "SNV + Primeira derivada (7pts)"
 Xinit = 1
 Xend = 117
-scans = 150
+scans = 500

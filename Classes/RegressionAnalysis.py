@@ -58,6 +58,8 @@ def partial_leasts_square_regression(x, y, train_split_percentage, file_name):
                 r2cal.append(i_r2c)
                 rmsecv.append(i_rmsecv)
                 r2cv.append(i_r2cv)
+                med_x_pred_polarized(x_df_r, y_df_r, i_rmsec, i_r2c, i_rmsecv, i_r2cv, i_model,
+                                     file_name + '\Figures\polarized_' + y_df.columns[i], i + 200, y_df.columns[i])
             else:
                 i_model, i_rmsec, i_r2c, i_rmsecv, i_r2cv = do_pls(x_df, y_df.iloc[:, i], train_split_percentage)
                 models.append(i_model)
@@ -236,7 +238,7 @@ def med_x_pred_polarized(x_data, y_data, i_rmsec, i_r2c, i_rmsecv, i_r2cv, i_mod
     path = os.path.expanduser("~/Desktop") + '/foodscienceml' + '/' + file_name.replace('.xlsx', '').replace('.xls', '') + '/'
     if not os.path.exists(path):
         os.makedirs(path)
-    plt.savefig(path + str(figname) + 'polarized' + '_.png')
+    plt.savefig(path + str(figname) + '_polarized' + '_.png')
 
 
 def med_x_pred_sigmab(x_data, y_data, summary_models, models, file_name, fig, paramname):
